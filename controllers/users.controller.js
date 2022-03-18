@@ -87,6 +87,26 @@ const { AppError } = require('../utils/appError');
     }
   );
   
+// Update user by ID
+ exports.updateUser = catchAsync(async (req, res, next) => {
+	const { userName, email } = req.body;
+	const { currentUser } = req;
+
+	await currentUser.update({ userName, email });
+
+	res.status(204).json({ status: 'success' });
+});
+
+// Delete user
+exports.disableUserAccount = catchAsync(async (req, res, next) => {
+	const { currentUser } = req;
+
+	await currentUser.update({ status: 'deleted' });
+
+	res.status(204).json({ status: 'success' });
+});
+
+  
   exports.loginUser = catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
   

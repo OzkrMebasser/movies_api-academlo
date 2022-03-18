@@ -38,18 +38,18 @@ const { AppError } = require('../utils/appError');
   
     const movie = await Movie.findOne({ where: { id } });
   
-    if (!user) {
-      return next(new AppError(404, 'User not found'));
+    if (!movie) {
+      return next(new AppError(404, 'Movie not found'));
     }
   
     res.status(200).json({
       status: 'success',
-      data: { user }
+      data: { movie }
     });
   });
   
   // Save new user
-  exports.createNewUser = catchAsync(
+  exports.createNewMovie = catchAsync(
     async (req, res, next) => {
       const { userName, email, password } = req.body;
   

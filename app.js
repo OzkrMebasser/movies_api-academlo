@@ -5,6 +5,7 @@ const { globalErrorHandler } = require('./controllers/error.controller');
 
 
 // Routers
+const { usersRouter } = require('./routes/users.routes');
 
 
 // Utils
@@ -17,7 +18,7 @@ app.use(express.json());
 
 // Endpoints
 // app.use('/api/v1/posts', postsRouter);
-// app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/users', usersRouter);
 // app.use('/api/v1/comments', commentsRouter);
 
 app.use('*', (req, res, next) => {

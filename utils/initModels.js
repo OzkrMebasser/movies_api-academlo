@@ -16,13 +16,13 @@ const initModels = () => {
   Movie.hasMany(Review);
   Review.belongsTo(Movie);
 
-  Movie.hasMany(Actor)
-  Actor.belongsToMany(Movie,{through:ActorsInMovie});
+  // Movie.belongsToMany(Actor, { through: ActorsInMovie});
+  // Actor.belongsToMany(Movie,{ through: ActorsInMovie });
 
 
   // 1 Actor <---> M Comment
-//   Actor.hasMany(Movie);
-//   Movie.belongsToMany(Actor);
+  // Actor.belongsToMany(Movie,{ through: ActorsInMovie});
+  // Movie.belongsToMany(Actor,{ through:ActorsInMovie});
 };
 
 module.exports = { initModels };

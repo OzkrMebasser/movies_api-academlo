@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 
 //Utils
 const { db } = require('./utils/dababase');
-// const { initModels } = require('./utils/initModels');
+const { initModels } = require('./utils/initModels');
 // const { initModels } = require('./utils/initModels')
 
 db
@@ -13,7 +13,7 @@ db
 
 // Models relations
 
-// initModels();
+initModels();
 
 db
   .sync()

@@ -28,6 +28,7 @@ const User = db.define('user', {
 	},
     role: {
 		type: DataTypes.STRING(15),
+		//admin | standard
 		defaultValue: 'standard',
 		allowNull: false,
 	}

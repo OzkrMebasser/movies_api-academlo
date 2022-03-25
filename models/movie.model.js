@@ -36,8 +36,12 @@ const Movie = db.define('movie', {
         // premier 
         type: DataTypes.STRING(10),
 		defaultValue: 'active',
-		allowNull: false,
-    }
+		allowNull: true,
+    },
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      }
 })
 
 module.exports = { Movie };

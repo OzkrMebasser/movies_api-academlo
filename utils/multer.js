@@ -1,25 +1,37 @@
 const multer = require('multer');
-const path = require('path');
+
+// Utils
 const { AppError } = require('./appError');
 
+//Esto sirve para cuando las imagenes se guardan en el servidor de nodejs
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'imgs');
+//   },
+//   filename: (req, file, cb) => {
+//     // originalname = example2.jpg
+//     const [name, extension] = file.originalname.split('.');
 
-const storage = multer.diskStorage({
-    // Donde se guardan los archivos
-    destination: function (req, file, cb) {
-     const destinationPath = path.join(__dirname,'..', 'images')
-      cb(null, destinationPath)
-    },
+//     const fileName = `${name}-${Date.now()}.${extension}`;
 
-    // Como se llamarian los archivos
-    filename: function (req, file, cb) {
-      if(!file.mimetype.startsWith('image')){
-          cb(new AppError(400, 'Must provide an image as a file'))
-      }
-      const [name, extension] = file.originalname.split('.');
+//     cb(null, fileName);
+//   }
+// });
 
-      const fileName = `${file.originalname}-${Date.now()}.${extension}`;
-      cb(null, fileName)
-    }
-  })
-  
-  const upload = multer({ storage: storage })
+const storage = multer.memoryStorage(); // req.file
+
+const multerFileFilter = (req, file, cb) => {
+  if (!file.mimetype.startsWith('image')) {
+    // Return an error
+    cb(new AppError(400, 'Must provide an image as a file',), false);
+  } else {
+    cb(null, true);
+  }
+};
+
+const upload = multer({
+  storage,
+  fileFilter: multerFileFilter
+});
+
+module.exports = { upload };

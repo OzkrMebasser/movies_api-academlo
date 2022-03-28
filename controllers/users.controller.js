@@ -4,25 +4,35 @@ const bcrypt = require('bcryptjs');
 
 // Models
 const { User } = require('../models/user.model');
-
 const { Movie } = require('../models/movie.model');
 const { Review } = require('../models/review.model');
 
 // Middlewares
 
-
-
 // Utils
 const { catchAsync } = require('../utils/catchAsync');
 const { AppError } = require('../utils/appError');
 
+
+dotenv.config( {path:'./config.env'} );
+
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   // Nested includes
   const users = await User.findAll({
-    where: { status: 'active' }
-    , attributes: { exclude: ['password', 'role'] },
-    include: [{model: Movie, include: [{model: User, attributes: {exclude: ['password', 'role']}, include: [{model: Review}]}]}]
-    
+    where: { status: 'active' },
+    attributes: { exclude: ['password', 'role'] },
+    include: [
+      {
+        model: Movie,
+        include: [
+          {
+            model: User,
+            attributes: { exclude: ['password', 'role'] },
+            include: [{ model: Review }]
+          }
+        ]
+      }
+    ]
   });
 
   res.status(200).json({

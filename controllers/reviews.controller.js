@@ -1,8 +1,7 @@
 // Models
 const { Review } = require('../models/review.model');
 const { User } = require('../models/user.model');
-const { Movie } = require('../models/movie.model')
-
+const { Movie } = require('../models/movie.model');
 
 //
 
@@ -15,88 +14,128 @@ const { AppError } = require('../utils/appError');
 
 // Get all reviews
 // export const getAllReviews
-exports.getAllReviews = catchAsync(async (req, res, next) => {
-  // SELECT * FROM reviews WHERE status = 'active'; -> reviews[]
-  const reviews = await Review.findAll({ where: { status: 'active' } });
+exports.getAllReviews = catchAsync(
+  async (req, res, next) => {
+    // SELECT * FROM reviews WHERE status = 'active'; -> reviews[]
+    const reviews = await Review.findAll({
+      where: { status: 'active' }
+    });
 
-  res.status(200).json({
-    status: 'success',
-    data: {
-      reviews
-    }
-  });
-});
+    res.status(200).json({
+      status: 'success',
+      data: {
+        reviews
+      }
+    });
+  }
+);
 
 // Get post by id
-exports.getReviewById = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
+exports.getReviewById = catchAsync(
+  async (req, res, next) => {
+    const { id } = req.params;
 
-  // SELECT * FROM posts WHERE id = 1;
-  const review = await Review.findOne({
-    where: { id, status: 'active' }
-  });
+    // SELECT * FROM posts WHERE id = 1;
+    const review = await Review.findOne({
+      where: { id, status: 'active' }
+    });
 
-  if (!review) {
-    return next(new AppError(404, 'No review found with the given ID'));
-  }
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      review
+    if (!review) {
+      return next(
+        new AppError(
+          404,
+          'No review found with the given ID'
+        )
+      );
     }
-  });
-});
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        review
+      }
+    });
+  }
+);
 
 // Save review to database
-exports.createReview = catchAsync(async (req, res, next) => {
-  // const {id}= req.currentUser;
-  const { title, comment, rating, userId, movieId } = req.body;
+exports.createReview = catchAsync(
+  async (req, res, next) => {
+    // const {id}= req.currentUser;
+    const { title, comment, rating, userId, movieId } =
+      req.body;
 
-  if (!title || !comment || !rating || !userId || !movieId) {
-    return next(
-      new AppError(400, 'Must provide a valid title, comment and userId')
-    );
+    if (
+      !title ||
+      !comment ||
+      !rating ||
+      !userId ||
+      !movieId
+    ) {
+      return next(
+        new AppError(
+          400,
+          'Must provide a valid title, comment and userId'
+        )
+      );
+    }
+
+    // INSERT INTO posts (title, content, userId) VALUES ('A new post', 'Saved in db', 1)
+    const newReview = await Review.create({
+      title,
+      comment,
+      rating,
+      userId,
+      movieId
+    });
+
+    res.status(201).json({
+      status: 'success',
+      data: { newReview }
+    });
   }
+);
 
-  // INSERT INTO posts (title, content, userId) VALUES ('A new post', 'Saved in db', 1)
-  const newReview = await Review.create({ title, comment, rating,userId, movieId });
+exports.updateReview = catchAsync(
+  async (req, res, next) => {
+    const { id } = req.params;
+    const { title, comment, rating, userId, movieId } =
+      req.body;
 
-  res.status(201).json({
-    status: 'success',
-    data: { newReview }
-  });
-});
+    if (
+      !title ||
+      !comment ||
+      !rating ||
+      !userId ||
+      !movieId
+    ) {
+      return next(
+        new AppError(
+          400,
+          'You must provide title, comment & rating'
+        )
+      );
+    }
 
-exports.updateReview = catchAsync( async (req, res, next) => {
-  const { id } = req.params;
-  const { title, comment, rating, userId, movieId } = req.body;
+    const review = await Review.findOne({ where: { id } });
 
-  if (!title || !comment || ! rating || !userId || !movieId) {
-    return next(
-      new AppError(
-        400,'You must provide title, comment & rating'
-        
-      )
-    );
+    if (!review) {
+      return next(
+        new AppError(404, 'No user review with this id')
+      );
+    }
+
+    await review.update({
+      title,
+      comment,
+      rating,
+      userId,
+      movieId
+    });
+
+    res.status(204).json({ status: 'success' });
   }
-
-  const review = await Review.findOne({ where: { id } });
-
-  if (!review) {
-    return next(
-      new AppError(404, 'No user review with this id')
-    );
-  }
-
-  await review.update({ title, comment, rating, userId, movieId });
-
-  res.status(204).json({ status: 'success' });
-  
-});
-
-
-
+);
 
 // // Delete post
 // exports.deletePost = async (req, res) => {

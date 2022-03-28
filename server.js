@@ -1,13 +1,12 @@
 const { app } = require('./app');
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
 
 //Utils
 const { db } = require('./utils/dababase');
 const { initModels } = require('./utils/initModels');
 // const { initModels } = require('./utils/initModels')
 
-db
-  .authenticate()
+db.authenticate()
   .then(() => console.log('Database authenticated'))
   .catch((err) => console.log(err));
 
@@ -15,15 +14,14 @@ db
 
 initModels();
 
-db
-  .sync()
+db.sync()
   .then(() => console.log('Database synced'))
   .catch((err) => console.log(err));
 
-
-  const PORT = process.env.PORT || 4000;
-
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
-  console.log(`This movie server is running in Port ${PORT}`);
+  console.log(
+    `This movie server is running in Port ${PORT}`
+  );
 });

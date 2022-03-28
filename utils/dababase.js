@@ -14,11 +14,11 @@ const db = new Sequelize({
   logging: false
   // ,
   // 	dialectOptions: {
-	// 	ssl: {
-	// 		require: true,
-	// 		rejectUnauthorized: false,
-	// 	},
-	// },
+  // 	ssl: {
+  // 		require: true,
+  // 		rejectUnauthorized: false,
+  // 	},
+  // },
 });
 
 module.exports = { db };
@@ -38,7 +38,6 @@ module.exports = { db };
 // Heroku CLI
 // heroku pg:psql postgresql-elliptical-57520 --app academlo-sequelize-example
 
-
 // Connect to Heroku cloud
 // const sequelize = new Sequelize({
 // 	host: 'heroku_host',
@@ -54,5 +53,3 @@ module.exports = { db };
 // 		},
 // 	},
 // });
-
-

@@ -2,11 +2,9 @@ const express = require('express');
 
 // Controllers
 const {
-    getAllReviews,
-    getReviewById,
-    createReview
-
-  
+  getAllReviews,
+  getReviewById,
+  createReview
 } = require('../controllers/reviews.controller');
 
 const router = express.Router();

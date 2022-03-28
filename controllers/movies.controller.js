@@ -8,7 +8,7 @@ const {
 const { Movie } = require('../models/movie.model');
 const { User } = require('../models/user.model');
 const { Review } = require('../models/review.model');
-const { Actor } = require('../models/actor.model')
+const { Actor } = require('../models/actor.model');
 // Utils
 const { catchAsync } = require('../utils/catchAsync');
 const { AppError } = require('../utils/appError');
@@ -20,8 +20,7 @@ exports.getAllMovies = catchAsync(
   async (req, res, next) => {
     // Nested includes
     const movies = await Movie.findAll({
-      where: { status: 'active' }
-      ,
+      where: { status: 'active' },
       include: [
         {
           model: Review
@@ -30,42 +29,42 @@ exports.getAllMovies = catchAsync(
       ]
     });
 
-      // Promise[]
-  const postsPromises = movies.map(
-    async ({
-      title,
-      description,
-      duration,
-      rating,
-      imgUrl,
-      genre,
-      status,
-      userId
-    }) => {
-      const imgRef = ref(storage, imgUrl);
-
-      const imgDownloadUrl = await getDownloadURL(imgRef);
-
-      return {
+    // Promise[]
+    const postsPromises = movies.map(
+      async ({
         title,
         description,
         duration,
         rating,
-        imgUrl : imgDownloadUrl,
+        imgUrl,
         genre,
         status,
-        userId,
-        // createdAt,
-        // updatedAt
-      };
-    }
-  );
+        userId
+      }) => {
+        const imgRef = ref(storage, imgUrl);
 
-  const resolvedPosts = await Promise.all(postsPromises);
+        const imgDownloadUrl = await getDownloadURL(imgRef);
+
+        return {
+          title,
+          description,
+          duration,
+          rating,
+          imgUrl: imgDownloadUrl,
+          genre,
+          status,
+          userId
+          // createdAt,
+          // updatedAt
+        };
+      }
+    );
+
+    const resolvedPosts = await Promise.all(postsPromises);
 
     res.status(200).json({
       status: 'success',
-      data: { movies: resolvedPosts}
+      data: { movies: resolvedPosts }
     });
   }
 );
@@ -152,7 +151,6 @@ exports.createNewMovie = catchAsync(
       imgRef,
       req.file.buffer
     );
-    
 
     const newMovie = await Movie.create({
       title,
@@ -175,20 +173,21 @@ exports.createNewMovie = catchAsync(
 // Update Movie by ID
 exports.updateMovie = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const { title, description, duration,  genre } = req.body;
+  const { title, description, duration, genre } = req.body;
 
   if (!title || !description || !duration || !genre) {
     return next(
       new AppError(
         400,
-        'Must provide all the info to update a movie',
+        'Must provide all the info to update a movie'
       )
     );
   }
-  
 
-  const movieUpdate = await Movie.findOne({ where: { id } });
-// Upload img to Cloud Storage (Firebase)
+  const movieUpdate = await Movie.findOne({
+    where: { id }
+  });
+  // Upload img to Cloud Storage (Firebase)
 
   // req.file;
   // const imgRef = ref(
@@ -226,7 +225,7 @@ exports.disableMovie = catchAsync(
 
     if (!movie) {
       return next(
-        new AppError(404,'No movie found with this id')
+        new AppError(404, 'No movie found with this id')
       );
     }
 
